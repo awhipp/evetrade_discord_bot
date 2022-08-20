@@ -1,0 +1,13 @@
+{
+    "name": "evetrade-finder-bot",
+    "version": "1.0.0",
+    "description": "A bot which routinely checks for profitable trades between EVE Online Trade Hubs, and posts them to a channel.",
+    "main": "bot.js",
+    "author": "awhipp",
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "https": "^1.0.0",
+        "node-url-shortener": "^2.0.3",
+        "winston": "^3.8.1"
+    }
+}
