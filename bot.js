@@ -30,9 +30,11 @@ bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
     console.log('Running...');
     
-    get_data();
+    get_data(config.alpha_channel);
     
-    setInterval(get_data, 1000 * 60 * run_every);
+    setInterval(() => {
+        get_data(config.alpha_channel)
+    }, 1000 * 60 * run_every);
 });
 
 function round_value(value, amount) {
@@ -42,30 +44,27 @@ function round_value(value, amount) {
     });
 }
 
-const profitPerJumpThreshold = 300000;
-const netProfitThreshold = 5000000;
-const link = 'https://bit.ly/evetrade';
-
-const process_json = (json) => {
+const process_json = (json, settings) => {
     const messages = [];
 
     json.forEach(trade => {
         const profitPerJump = parseFloat(trade['Profit per Jump'].replace(/,/g, ''));
         const netProfit = parseFloat(trade['Net Profit'].replace(/,/g, ''));
 
-        if (profitPerJump >= profitPerJumpThreshold || netProfit >= netProfitThreshold) {
+        if (profitPerJump >= settings.profit_per_jump || netProfit >= settings.min_profit) {
             const item = trade['Item'];
             const from = trade['From']['name'];
             const to = trade['Take To']['name'];
             const roi = trade['ROI'];
             const jumps = trade['Jumps'];
+            const quantity = trade['Quantity'];
 
-            const message = `__${item}__ (${jumps} jumps)\n` + 
+            const message = `${quantity}x __${item}__ (${jumps} jumps)\n` + 
             `From: ${from}\nTo: ${to}\n\n` +
             `**Profit per Jump: ${round_value(profitPerJump)} ISK**\n` +
             `**Net Profit: ${round_value(netProfit)} ISK**\n\n` +
             `ROI: ${round_value(parseFloat(roi))}% \n` +
-            `EVE Trade Validation Link: ${link}\n`;
+            `EVE Trade Validation Link: <${settings.link}>\n`;
 
             if (history.indexOf(message) == -1) {
                 messages.push(message);
@@ -80,7 +79,7 @@ const process_json = (json) => {
     return '';
 };
 
-const get_request = (url) => {
+const get_request = (url, settings) => {
     const options = {
         headers: {
             'User-Agent': 'evetrade-finder-discord-bot'
@@ -99,7 +98,7 @@ const get_request = (url) => {
                 try {
                     const json = JSON.parse(rawData);
                     resolve(
-                        process_json(json)
+                        process_json(json, settings)
                     );
                 } catch (err) {
                     console.log(`Error parsing JSON: ${err}`);
@@ -119,39 +118,36 @@ const AMARR =   '10000043:60008494';
 const RENS =    '10000032:60011866';
 const HEK =     '10000030:60004588';
 const DODIXIE = '10000042:60005686';
-
-const maxWeight = 34000;
-const minProfit = 250000;
 const ROI = 0.04;
 
-const get_trades = () => {
+const get_trades = (settings) => {
     const URL = `${api_endpoint}?` +
         `from=${JITA},${AMARR},${RENS},${HEK},${DODIXIE}` +
         `&to=${JITA},${AMARR},${RENS},${HEK},${DODIXIE}` +
         `&maxBudget=9007199254740991` + 
-        `&maxWeight=${maxWeight}` +
-        `&minProfit=${minProfit}` +
+        `&maxWeight=${settings.max_weight}` +
+        `&minProfit=${settings.min_profit}` +
         `&minROI=${ROI}` +
         `&routeSafety=secure` +
         `&systemSecurity=high_sec` +
         `&tax=0.08`;
 
-    return get_request(URL);
+    return get_request(URL, settings);
 }
 
-const get_data = () => {
-    const outro = `\nNote: I am a bot (in BETA). Please validate your trades with the link above.\n----`;
+const get_data = (settings) => {
+    const outro = `\nNote: I am a bot (in BETA). Please validate your trades with the link above and be aware of common market place scams: <https://bit.ly/eve_online_scams>\n----`;
 
-    get_trades().then(data => {
+    get_trades(settings).then(data => {
         const dt = new Date().toISOString();
 
         if (data.length > 0) {
-            const intro = `- **${dt}**\nNew Trade Deal Found (Capacity under 34,000 m3):\n\n`;
+            const intro = `- **${dt}**\nNew Trade Deal Found (Capacity between ${round_value(settings.min_weight)} ${settings.max_weight} m3):\n\n`;
     
-            logger.info(`Message sent to channel (${channel_id}) at ${dt}`);
+            logger.info(`Message sent to channel (${settings.channel_id}) at ${dt}`);
             data.forEach(message => {
                 bot.sendMessage({
-                    to: channel_id,
+                    to: settings.channel_id,
                     message: intro + message + outro
                 });
                 history.push(message);
