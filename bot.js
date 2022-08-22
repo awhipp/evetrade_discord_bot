@@ -27,12 +27,12 @@ var bot = new Discord.Client({
 
 bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
-    console.log('Running...');
+    logger.info('Running...');
     
     const channels = config.channels;
     channels.forEach(channel => {
-        console.log(channel);
-        
+        logger.info(settings);
+
         get_data(channel);
         
         setInterval(() => {
@@ -158,6 +158,7 @@ const get_data = (settings) => {
             });
         } else {
             logger.info(`Message NOT sent to channel (${settings.channel_id}) at ${dt}`);
+            logger.info(settings);
         }
     });
 };
