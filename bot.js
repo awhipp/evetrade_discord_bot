@@ -31,7 +31,7 @@ bot.on('ready', function (evt) {
     
     const channels = config.channels;
     channels.forEach(channel => {
-        logger.info(settings);
+        logger.info(channel);
 
         get_data(channel);
         
