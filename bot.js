@@ -54,8 +54,12 @@ const process_json = (json, settings) => {
     json.forEach(trade => {
         const profitPerJump = parseFloat(trade['Profit per Jump'].replace(/,/g, ''));
         const netProfit = parseFloat(trade['Net Profit'].replace(/,/g, ''));
+        const weight = parseFloat(trade['Total Volume (m3)'].replace(/,/g, ''));
 
-        if (profitPerJump >= settings.profit_per_jump || netProfit >= settings.min_profit) {
+        if (
+            weight > settings.min_weight &&
+            (profitPerJump >= settings.profit_per_jump || netProfit >= settings.min_profit)
+        ) {
             const item = trade['Item'];
             const from = trade['From']['name'];
             const to = trade['Take To']['name'];
@@ -68,6 +72,7 @@ const process_json = (json, settings) => {
             `**Profit per Jump: ${round_value(profitPerJump)} ISK**\n` +
             `**Net Profit: ${round_value(netProfit)} ISK**\n\n` +
             `ROI: ${round_value(parseFloat(roi))}% \n` +
+            `Weight: ${round_value(weight)} m3\n` +
             `EVE Trade Validation Link: <${settings.link}>\n`;
 
             if (history.indexOf(message) == -1) {
@@ -158,7 +163,6 @@ const get_data = (settings) => {
             });
         } else {
             logger.info(`Message NOT sent to channel (${settings.channel_id}) at ${dt}`);
-            logger.info(settings);
         }
     });
 };

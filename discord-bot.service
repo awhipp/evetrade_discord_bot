@@ -1,0 +1,13 @@
+[Unit]
+Description=EVE Trade Finder Discord Bot
+After=network.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+ExecStart=/usr/bin/node /home/<username>/evetrade_discord_bot/bot.js
+
+[Install]
+WantedBy=multi-user.target

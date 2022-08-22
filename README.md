@@ -32,3 +32,12 @@ Part of the greater [EVETrade](https://github.com/awhipp/evetrade) ecosystem.
     "api": "<API ENDPOINT>"
 }
 ```
+
+### Running systemd service
+
+* Update `ExecStart` in `discord-bot.service` to point at correct directory
+* Move `discord-bot.service` to `/etc/systemd/system/`
+* Reload Daemon: `sudo systemctl daemon-reload`
+* Enable Service: `sudo systemctl enable discord-bot.service`
+* Start Service: `sudo systemctl start discord-bot.service`
+* View Logs: `journalctl -u discord-bot.service -f`
