@@ -5,7 +5,6 @@ const https = require('https');
 
 const run_every = 1; // minutes
 
-const channel_id = config.channel_id;
 const api_endpoint = config.api;
 
 // Configure logger settings
@@ -30,11 +29,14 @@ bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
     console.log('Running...');
     
-    get_data(config.alpha_channel);
-    
-    setInterval(() => {
-        get_data(config.alpha_channel)
-    }, 1000 * 60 * run_every);
+    const channels = config.channels;
+    channels.forEach(channel => {
+        get_data(channel);
+        
+        setInterval(() => {
+            get_data(channel)
+        }, 1000 * 60 * run_every);
+    });
 });
 
 function round_value(value, amount) {
@@ -153,7 +155,7 @@ const get_data = (settings) => {
                 history.push(message);
             });
         } else {
-            logger.info(`Message NOT sent to channel (${channel_id}) at ${dt}`);
+            logger.info(`Message NOT sent to channel (${settings.channel_id}) at ${dt}`);
         }
     });
 };

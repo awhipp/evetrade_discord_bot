@@ -17,15 +17,18 @@ Part of the greater [EVETrade](https://github.com/awhipp/evetrade) ecosystem.
 
 ```json
 {
-    "token": "<DISCORD BOT TOKEN>",
-    "alpha_channel": {
-        "channel_id": "<CHANNEL ID>",
-        "max_weight": 34000,
-        "min_weight": 0,
-        "profit_per_jump": 300000,
-        "min_profit": 5000000,
-        "link": "<LINK TO TRADE>"
-    },
-    "api": "<API LINK>",
+    "token": "<DISCORD APP TOKEN>",
+    "channels": [
+        {
+            "title": "<Descriptor (Not necessary)>",
+            "channel_id": "<CHANNEL ID>",
+            "min_weight": 0,
+            "max_weight": 34000,
+            "profit_per_jump": 300000,
+            "min_profit": 5000000,
+            "link": "<LINK TO TRADE>"
+        }
+    ],
+    "api": "<API ENDPOINT>"
 }
 ```
