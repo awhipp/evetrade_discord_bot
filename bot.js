@@ -142,7 +142,7 @@ const get_data = (settings) => {
         const dt = new Date().toISOString();
 
         if (data.length > 0) {
-            const intro = `- **${dt}**\nNew Trade Deal Found (Capacity between ${round_value(settings.min_weight)} ${settings.max_weight} m3):\n\n`;
+            const intro = `- **${dt}**\nNew Trade Deal Found (Capacity between ${round_value(settings.min_weight)} and ${settings.max_weight} m3):\n\n`;
     
             logger.info(`Message sent to channel (${settings.channel_id}) at ${dt}`);
             data.forEach(message => {
