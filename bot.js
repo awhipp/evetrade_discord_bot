@@ -31,6 +31,8 @@ bot.on('ready', function (evt) {
     
     const channels = config.channels;
     channels.forEach(channel => {
+        console.log(channel);
+        
         get_data(channel);
         
         setInterval(() => {
