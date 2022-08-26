@@ -57,8 +57,7 @@ const process_json = (json, settings) => {
         const weight = parseFloat(trade['Total Volume (m3)'].replace(/,/g, ''));
 
         if (
-            weight > settings.min_weight &&
-            (profitPerJump >= settings.profit_per_jump || netProfit >= settings.min_profit)
+            weight >= settings.min_weight && profitPerJump >= settings.profit_per_jump
         ) {
             const item = trade['Item'];
             const from = trade['From']['name'];
@@ -66,11 +65,13 @@ const process_json = (json, settings) => {
             const roi = trade['ROI'];
             const jumps = trade['Jumps'];
             const quantity = trade['Quantity'];
+            const netProfit = trade['Net Profit'];
+
 
             const message = `${quantity}x __${item}__ (${jumps} jumps)\n` + 
             `From: ${from}\nTo: ${to}\n\n` +
             `**Profit per Jump: ${round_value(profitPerJump)} ISK**\n` +
-            `**Net Profit: ${round_value(netProfit)} ISK**\n\n` +
+            `**Net Profit: ${netProfit} ISK**\n\n` +
             `ROI: ${round_value(parseFloat(roi))}% \n` +
             `Weight: ${round_value(weight)} m3\n` +
             `EVE Trade Validation Link: <${settings.link}>\n`;

@@ -24,8 +24,7 @@ Part of the greater [EVETrade](https://github.com/awhipp/evetrade) ecosystem.
             "channel_id": "<CHANNEL ID>",
             "min_weight": 0,
             "max_weight": 34000,
-            "profit_per_jump": 300000,
-            "min_profit": 5000000,
+            "profit_per_jump": 500000,
             "link": "<LINK TO TRADE>"
         }
     ],
