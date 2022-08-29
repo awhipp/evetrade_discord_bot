@@ -53,7 +53,6 @@ const process_json = (json, settings) => {
 
     json.forEach(trade => {
         const profitPerJump = parseFloat(trade['Profit per Jump'].replace(/,/g, ''));
-        const netProfit = parseFloat(trade['Net Profit'].replace(/,/g, ''));
         const weight = parseFloat(trade['Total Volume (m3)'].replace(/,/g, ''));
 
         if (
@@ -136,7 +135,7 @@ const get_trades = (settings) => {
         `&to=${JITA},${AMARR},${RENS},${HEK},${DODIXIE}` +
         `&maxBudget=9007199254740991` + 
         `&maxWeight=${settings.max_weight}` +
-        `&minProfit=${settings.min_profit}` +
+        `&minProfit=${settings.profit_per_jump}` +
         `&minROI=${ROI}` +
         `&routeSafety=secure` +
         `&systemSecurity=high_sec` +
@@ -146,7 +145,7 @@ const get_trades = (settings) => {
 }
 
 const get_data = (settings) => {
-    const outro = `\nNote: I am a bot (in BETA). Please validate your trades with the link above and be aware of common market place scams: <https://bit.ly/eve_online_scams>\n----`;
+    const outro = `\nNote: I am a bot. Please validate your trades with the link above and be aware of common market place scams: <https://bit.ly/eve_online_scams>\n----`;
 
     get_trades(settings).then(data => {
         const dt = new Date().toISOString();
