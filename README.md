@@ -18,6 +18,7 @@ Part of the greater [EVETrade](https://github.com/awhipp/evetrade) ecosystem.
 ```json
 {
     "token": "<DISCORD APP TOKEN>",
+    "schedule": 15,
     "channels": [
         {
             "title": "<Descriptor (Not necessary)>",
