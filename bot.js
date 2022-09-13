@@ -3,7 +3,7 @@ const logger = require('winston');
 const config = require('./config.json');
 const https = require('https');
 
-const run_every = 1; // minutes
+const run_every = parseInt(config.schedule); // runs every N minutes
 
 const api_endpoint = config.api;
 
@@ -27,7 +27,7 @@ var bot = new Discord.Client({
 
 bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
-    logger.info('Running...');
+    logger.info('Running every ' + run_every + ' minutes...');
     
     const channels = config.channels;
     channels.forEach(channel => {
